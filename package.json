@@ -1,0 +1,22 @@
+{
+  "name": "agency-wp-cli",
+  "version": "1.0.0",
+  "description": "BePlus WordPress CLI Generator",
+  "main": "index.js",
+  "bin": {
+    "agency-wp-cli": "bin/index.js"
+  },
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "inquirer": "^13.1.0"
+  }
+}
