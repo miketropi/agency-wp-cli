@@ -18,7 +18,7 @@ export async function askConfig() {
       name: 'namespace',
       message: 'PHP Namespace:',
       default: answers =>
-        answers.slug.replace(/-([a-z])/g, g => g[1].toUpperCase()),
+        answers.slug.replace(/-([a-z])/g, g => g[1].toUpperCase()).toUpperCase()
     },
     {
       type: 'input',
