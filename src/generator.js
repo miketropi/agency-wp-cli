@@ -12,7 +12,7 @@ export async function generatePlugin(config) {
   );
 
   // 2. Remove git history
-  execSync(`rm -rf ${targetDir}/.git`);
+  execSync(`rm -rf "${targetDir}/.git"`);
 
   // 3. Replace placeholders
   await replaceRecursive(targetDir, {
