@@ -7,7 +7,7 @@ export async function generatePlugin(config) {
 
   // 1. Clone template repo
   execSync(
-    `git clone git@github.com:miketropi/wp-plugin-template.git ${targetDir}`,
+    `git clone git@github.com:miketropi/wp-plugin-template.git "${targetDir}"`,
     { stdio: 'inherit' }
   );
 
