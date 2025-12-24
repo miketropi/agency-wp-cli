@@ -1,20 +1,21 @@
 import path from 'path';
 import { execSync } from 'child_process';
-import { replaceRecursive } from './utils.js';
+import { replaceRecursive } from '../utils.js';
+import { TEMPLATE_REPOS } from '../constants.js';
 
 export async function generatePlugin(config) {
   const targetDir = path.resolve(process.cwd(), config.slug);
 
-  // 1. Clone template repo
+  console.log('📦 Cloning plugin template...');
   execSync(
-    `git clone git@github.com:miketropi/wp-plugin-template.git "${targetDir}"`,
+    `git clone ${TEMPLATE_REPOS.plugin} "${targetDir}"`,
     { stdio: 'inherit' }
   );
 
-  // 2. Remove git history
+  // remove git history
   execSync(`rm -rf "${targetDir}/.git"`);
 
-  // 3. Replace placeholders
+  // replace placeholders
   await replaceRecursive(targetDir, {
     '__PLUGIN_SLUG__': config.slug,
     '__PLUGIN_NAME__': config.name,
@@ -23,5 +24,6 @@ export async function generatePlugin(config) {
     '__TEXT_DOMAIN__': config.slug,
   });
 
-  console.log('✅ Plugin generated at', targetDir);
+  console.log('✅ Plugin created:', config.slug);
 }
+
