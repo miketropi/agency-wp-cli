@@ -1,30 +1,30 @@
 import inquirer from 'inquirer';
 
-export async function askConfig() {
+export async function askPluginQuestions() {
   return inquirer.prompt([
     {
-      type: 'input',
       name: 'slug',
       message: 'Plugin slug (folder name):',
-      validate: v => v ? true : 'Required',
+      validate: v => !!v,
     },
     {
-      type: 'input',
       name: 'name',
       message: 'Plugin name:',
+      validate: v => !!v,
     },
     {
-      type: 'input',
       name: 'namespace',
       message: 'PHP Namespace:',
       default: answers =>
-        answers.slug.replace(/-([a-z])/g, g => g[1].toUpperCase()).toUpperCase()
+        answers.slug
+          .replace(/[^a-zA-Z0-9]/g, '')  // remove special chars, -, _, space
+          .toUpperCase(),
     },
     {
-      type: 'input',
       name: 'author',
       message: 'Author:',
       default: 'Your Agency',
     },
   ]);
 }
+

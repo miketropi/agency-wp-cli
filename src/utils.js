@@ -1,23 +1,22 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function replaceRecursive(dir, replacements) {
-  const files = fs.readdirSync(dir);
+export async function replaceRecursive(dir, map) {
+  const ignore = ['.git', 'node_modules', 'vendor'];
 
-  for (const file of files) {
-    const fullPath = path.join(dir, file);
-    const stat = fs.statSync(fullPath);
+  for (const file of fs.readdirSync(dir)) {
+    if (ignore.includes(file)) continue;
 
-    if (stat.isDirectory()) {
-      await replaceRecursive(fullPath, replacements);
+    const full = path.join(dir, file);
+
+    if (fs.statSync(full).isDirectory()) {
+      await replaceRecursive(full, map);
     } else {
-      let content = fs.readFileSync(fullPath, 'utf8');
-
-      for (const [key, value] of Object.entries(replacements)) {
+      let content = fs.readFileSync(full, 'utf8');
+      for (const [key, value] of Object.entries(map)) {
         content = content.replaceAll(key, value);
       }
-
-      fs.writeFileSync(fullPath, content);
+      fs.writeFileSync(full, content);
     }
   }
 }
