@@ -22,6 +22,7 @@ export async function generatePlugin(config) {
     '__NAMESPACE__': config.namespace,
     '__AUTHOR__': config.author,
     '__TEXT_DOMAIN__': config.slug,
+    'wp-plugin-template': config.slug,
   });
 
   console.log('✅ Plugin created:', config.slug);
