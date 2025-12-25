@@ -22,6 +22,7 @@ export async function generatePlugin(config) {
     '__NAMESPACE__': config.namespace,
     '__AUTHOR__': config.author,
     '__TEXT_DOMAIN__': config.slug,
+    '__PLUGIN_SLUG_FLAT__': config.slug.replace(/[^a-zA-Z0-9]/g, ''),
     'wp-plugin-template': config.slug,
   });
 
