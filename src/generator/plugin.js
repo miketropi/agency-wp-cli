@@ -26,6 +26,10 @@ export async function generatePlugin(config) {
     'wp-plugin-template': config.slug,
   });
 
+  process.chdir(targetDir);
+  console.log('📦 Installing npm dependencies...');
+  execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
+
   console.log('✅ Plugin created:', config.slug);
 }
 
