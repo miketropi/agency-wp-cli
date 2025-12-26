@@ -1,29 +1,42 @@
 # Agency WP CLI
 
-A command-line tool for quickly generating WordPress plugins, themes, and blocks from templates. This tool scaffolds new WordPress resources by cloning template repositories and customizing them with your details.
+A command-line tool for scaffolding WordPress plugins, themes, and generating blocks within existing projects. This tool helps you quickly bootstrap new WordPress resources and add blocks to your plugins.
 
-## Description
+## Features
 
-**Agency WP CLI** is an interactive CLI tool that helps you bootstrap WordPress resources. It:
+- 🚀 **Create new plugins** - Scaffold complete WordPress plugins from templates
+- 🎨 **Create new themes** - Generate WordPress theme structures
+- 🧩 **Make blocks** - Generate custom Gutenberg blocks inside existing plugins
+- 🔄 **Auto-replace placeholders** - Automatically customize templates with your details
+- 📦 **Template-based** - Uses proven template repositories for consistency
 
-- Clones WordPress template repositories (plugins, themes, blocks)
-- Prompts you for configuration details
-- Automatically replaces placeholders throughout the codebase
-- Generates ready-to-use WordPress resource structures
+## Installation
 
-## Installation & Usage
+### Quick Start (Recommended)
 
-### Quick Start
-
-Run the tool directly using `npx`:
+Run directly with `npx`:
 
 ```bash
-npx github:miketropi/agency-wp-cli create <type>
+npx github:miketropi/agency-wp-cli <command>
 ```
 
-Where `<type>` is one of: `plugin`, `theme`, or `block`.
+### Local Installation
 
-### Commands
+```bash
+npm install -g github:miketropi/agency-wp-cli
+```
+
+Then use:
+
+```bash
+agency-wp-cli <command>
+```
+
+## Commands
+
+### `create` - Scaffold New Resources
+
+Create new WordPress plugins or themes from templates.
 
 #### Create a Plugin
 
@@ -31,59 +44,101 @@ Where `<type>` is one of: `plugin`, `theme`, or `block`.
 npx github:miketropi/agency-wp-cli create plugin
 ```
 
-The tool will prompt you for:
+**Prompts:**
+- **Plugin slug** (folder name) - Required
+  - Example: `my-awesome-plugin`
+- **Plugin name** - Display name
+  - Example: `My Awesome Plugin`
+- **PHP Namespace** - Auto-generated from slug (uppercase, special chars removed)
+  - Example: `MYAWESOMEPLUGIN`
+- **Author** - Default: `Your Agency`
 
-1. **Plugin slug** (folder name) - Required
-   - Example: `my-awesome-plugin`
+**What it does:**
+1. Clones the plugin template repository
+2. Removes git history
+3. Replaces placeholders throughout the codebase
+4. Generates plugin in `./{slug}/` directory
 
-2. **Plugin name** - The display name of your plugin
-   - Example: `My Awesome Plugin`
+**After creation, you'll see:**
+```
+🎉 Plugin scaffolded successfully!
+Next steps to get started:
 
-3. **PHP Namespace** - The PHP namespace for your plugin classes
-   - Default: Automatically generated from the slug (uppercase, special chars removed)
-   - Example: `MYAWESOMEPLUGIN`
+1. Move into your plugin directory:
+   cd "my-awesome-plugin"
 
-4. **Author** - The author name
-   - Default: `Your Agency`
+2. Install PHP dependencies with Composer:
+   composer install
 
-#### Create a Theme (Waiting for update)
+3. Install JavaScript dependencies:
+   npm install --legacy-peer-deps
+
+4. Start your development/build process:
+   npm run dev     # or 'npm run build' for a production build
+```
+
+#### Create a Theme
 
 ```bash
 npx github:miketropi/agency-wp-cli create theme
 ```
 
-The tool will prompt you for:
+**Prompts:**
+- **Theme slug** (folder name) - Required
+  - Example: `my-awesome-theme`
+- **Theme name** - Display name
+  - Example: `My Awesome Theme`
+- **PHP Namespace** - Auto-generated from slug (uppercase, special chars removed)
+  - Example: `MYAWESOMETHEME`
+- **Author** - Default: `Your Agency`
 
-1. **Theme slug** (folder name) - Required
-   - Example: `my-awesome-theme`
+**What it does:**
+1. Clones the theme template repository
+2. Removes git history
+3. Replaces placeholders throughout the codebase
+4. Generates theme in `./{slug}/` directory
 
-2. **Theme name** - The display name of your theme
-   - Example: `My Awesome Theme`
+### `make` - Generate Code in Existing Projects
 
-3. **PHP Namespace** - The PHP namespace for your theme classes
-   - Default: Automatically generated from the slug (uppercase, special chars removed)
-   - Example: `MYAWESOMETHEME`
+Generate blocks and other resources inside existing WordPress projects.
 
-4. **Author** - The author name
-   - Default: `Your Agency`
-
-#### Create a Block (Waiting for update)
+#### Make a Block
 
 ```bash
-npx github:miketropi/agency-wp-cli create block
+npx github:miketropi/agency-wp-cli make block
 ```
 
-The tool will prompt you for:
+**Requirements:**
+- Must be run inside a WordPress plugin directory
+- Plugin must have a main PHP file with a plugin header (`Plugin Name:`)
 
-1. **Block slug** (folder name) - Required
-   - Example: `my-custom-block`
+**Prompts:**
+- **Block name** - Display name
+  - Example: `Hero Section`
+- **Block slug** - Auto-generated from name (lowercase, hyphenated)
+  - Example: `hero-section`
 
-2. **Block name** - The display name of your block
-   - Example: `My Custom Block`
+**What it does:**
+1. Detects the current plugin directory
+2. Creates block files in `src/blocks/{slug}/`
+3. Generates:
+   - `block.json` - Block configuration
+   - `block.jsx` - React component
+   - `render.php` - Server-side render template
+   - `style.css` - Block styles
+4. Replaces placeholders with plugin and block details
 
-3. **PHP Namespace** - The PHP namespace for your block classes
-   - Default: Automatically generated from the slug
-   - Example: `MyCustomBlock`
+**Block structure:**
+```
+your-plugin/
+  src/
+    blocks/
+      hero-section/
+        block.json
+        block.jsx
+        render.php
+        style.css
+```
 
 ## Examples
 
@@ -99,6 +154,10 @@ $ npx github:miketropi/agency-wp-cli create plugin
 
 📦 Cloning plugin template...
 ✅ Plugin created: contact-form-pro
+
+🎉 Plugin scaffolded successfully!
+Next steps to get started:
+...
 ```
 
 ### Creating a Theme
@@ -115,38 +174,121 @@ $ npx github:miketropi/agency-wp-cli create theme
 ✅ Theme created: modern-portfolio
 ```
 
-### Creating a Block
+### Making a Block
 
 ```bash
-$ npx github:miketropi/agency-wp-cli create block
+$ cd my-wordpress-plugin
+$ npx github:miketropi/agency-wp-cli make block
 
-? Block slug (folder name): hero-section
 ? Block name: Hero Section
-? PHP Namespace: HeroSection
+? Block slug (folder name): hero-section
 
-📦 Cloning block template...
 ✅ Block created: hero-section
+
+🎉 Block created successfully!
 ```
 
-## What Happens
+## Project Structure
 
-After providing the information, the tool will:
+```
+agency-wp-cli/
+├── bin/
+│   └── index.js              # CLI entry point
+├── src/
+│   ├── commands/
+│   │   ├── create.js         # Create command router
+│   │   ├── create-plugin.js  # Plugin creation handler
+│   │   ├── create-theme.js   # Theme creation handler
+│   │   ├── make.js           # Make command router
+│   │   └── make-block.js     # Block generation handler
+│   ├── generator/
+│   │   ├── plugin.js         # Plugin generator
+│   │   ├── theme.js          # Theme generator
+│   │   └── make-block.js     # Block generator
+│   ├── prompts/
+│   │   ├── plugin.js         # Plugin prompts
+│   │   ├── theme.js          # Theme prompts
+│   │   └── make-block.js     # Block prompts
+│   ├── templates/
+│   │   └── make-block/       # Block template files
+│   ├── constants.js          # Template repository URLs
+│   └── utils.js              # Utility functions
+└── package.json
+```
 
-1. Clone the appropriate template repository
-2. Remove the git history
-3. Replace all placeholders with your provided values
-4. Generate the resource in a new directory matching your slug
+## How It Works
 
-The generated resource will be created in your current working directory.
+### Placeholder Replacement
+
+The tool automatically replaces placeholders in template files:
+
+**For plugins:**
+- `__PLUGIN_SLUG__` → Your plugin slug
+- `__PLUGIN_NAME__` → Your plugin name
+- `__NAMESPACE__` → Your PHP namespace
+- `__AUTHOR__` → Author name
+- `__TEXT_DOMAIN__` → Plugin slug (for translations)
+- `__PLUGIN_SLUG_FLAT__` → Slug without special characters
+
+**For blocks:**
+- `__PLUGIN_SLUG__` → Parent plugin slug
+- `__BLOCK_SLUG__` → Block slug
+- `__BLOCK_NAME__` → Block display name
+
+### Ignored Directories
+
+When replacing placeholders, these directories are skipped:
+- `.git`
+- `node_modules`
+- `vendor`
 
 ## Requirements
 
-- Node.js (for running npx)
-- Git (for cloning the template repositories)
-- Access to the template repositories:
+- **Node.js (v24^)** - For running the CLI tool
+- **Git** - For cloning template repositories
+- **Access to template repositories:**
   - `https://github.com/miketropi/wp-plugin-template.git`
-  - `https://github.com/miketropi/wp-theme-template.git` (Waiting for update)
-  - `https://github.com/miketropi/wp-block-template.git` (Waiting for update)
+  - `https://github.com/miketropi/wp-theme-template.git`
+
+## Development
+
+### Local Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/miketropi/agency-wp-cli.git
+cd agency-wp-cli
+
+# Install dependencies
+npm install
+
+# Link globally for testing
+npm link
+
+# Now you can use it
+agency-wp-cli create plugin
+```
+
+### Dependencies
+
+- `commander` - CLI framework
+- `inquirer` - Interactive prompts
+- `fs-extra` - Enhanced file system operations
+
+## Troubleshooting
+
+### "Can't spot your main plugin file"
+
+When running `make block`, ensure you're:
+- Inside a WordPress plugin directory
+- The plugin has a PHP file with a plugin header (`Plugin Name:`)
+
+### Template repository access
+
+If you get cloning errors:
+- Ensure you have access to the template repositories
+- Check your Git credentials
+- Verify the repository URLs in `src/constants.js`
 
 ## License
 
