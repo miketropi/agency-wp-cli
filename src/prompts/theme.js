@@ -3,29 +3,40 @@ import inquirer from 'inquirer';
 export async function askThemeQuestions() {
   return inquirer.prompt([
     {
-      name: 'slug',
-      message: 'Theme slug (folder name):',
-      validate: v => !!v,
+      type: 'input',
+      name: 'THEME_SLUG',
+      message: 'Folder name for the theme (kebab-case):',
+      default: 'wp-theme-template',
+      validate: input => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(input) || 'Use kebab-case (e.g., my-theme-name)',
     },
     {
-      name: 'name',
-      message: 'Theme name:',
-      validate: v => !!v,
+      type: 'input',
+      name: 'THEME_NAME',
+      message: 'Theme display name:',
+      default: 'WP Theme Template',
+      validate: input => !!input || 'Display name is required.',
     },
-    // namespace
     {
-      name: 'namespace',
-      message: 'PHP Namespace:',
+      type: 'input',
+      name: 'NAMESPACE',
+      message: 'PHP namespace (PascalCase):',
       default: answers =>
-        answers.slug
-          .replace(/[^a-zA-Z0-9]/g, '')  // remove special chars, -, _, space
-          .toUpperCase(),
+        answers.THEME_SLUG
+          ? answers.THEME_SLUG
+              .split('-')
+              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+              .join('')
+          : '',
+      validate: input =>
+        /^[A-Z][A-Za-z0-9]*([\\][A-Z][A-Za-z0-9]*)*$/.test(input) ||
+        'Use PascalCase, optionally with backslashes. Example: MyTheme or MyCompany\\MyTheme',
     },
-    // author
     {
-      name: 'author',
-      message: 'Author:',
-      default: 'Your Agency',
+      type: 'input',
+      name: 'TEXT_DOMAIN',
+      message: 'Translation text domain:',
+      default: answers => answers.THEME_SLUG || '',
+      validate: input => !!input || 'Text domain is required.',
     },
   ]);
 }
