@@ -20,6 +20,8 @@ export async function generateTheme(config) {
     '__THEME_SLUG__': config.THEME_SLUG,
     '__THEME_SLUG_FLAT__': config.THEME_SLUG.toLowerCase().replace(/-/g, '_'),
     '__THEME_NAME__': config.THEME_NAME,
+    '__NAMESPACE__': config.NAMESPACE,
+    '__THEME_URI__': config.THEME_URI,
     '__TEXT_DOMAIN__': config.TEXT_DOMAIN,
   });
 

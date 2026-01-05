@@ -33,6 +33,15 @@ export async function askThemeQuestions() {
     },
     {
       type: 'input',
+      name: 'THEME_URI',
+      message: "URL of the interface's public website:",
+      default: '',
+      validate: input => 
+        input === '' || /^(https?:\/\/)?([^\s.]+\.\S{2,}|localhost[\:?\d]*)\S*$/.test(input) || 
+        'Enter a valid URL (e.g., https://example.com) or leave blank.',
+    },
+    {
+      type: 'input',
       name: 'TEXT_DOMAIN',
       message: 'Translation text domain:',
       default: answers => answers.THEME_SLUG || '',
