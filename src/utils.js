@@ -4,19 +4,37 @@ import path from 'path';
 export const replaceRecursive = async (dir, map) => {
   const ignore = ['.git', 'node_modules', 'vendor'];
 
-  for (const file of fs.readdirSync(dir)) {
-    if (ignore.includes(file)) continue;
+  // Get directory entries
+  const entries = fs.readdirSync(dir);
+  
+  for (const entry of entries) {
+    if (ignore.includes(entry)) continue;
 
-    const full = path.join(dir, file);
+    let entryPath = path.join(dir, entry);
+    let newName = entry;
+    
+    // Replace placeholders in file/directory name
+    for (const [key, value] of Object.entries(map)) {
+      if (newName.includes(key)) {
+        newName = newName.replaceAll(key, value);
+      }
+    }
+    
+    // Rename if the name changed
+    if (newName !== entry) {
+      const newPath = path.join(dir, newName);
+      fs.renameSync(entryPath, newPath);
+      entryPath = newPath;
+    }
 
-    if (fs.statSync(full).isDirectory()) {
-      await replaceRecursive(full, map);
+    if (fs.statSync(entryPath).isDirectory()) {
+      await replaceRecursive(entryPath, map);
     } else {
-      let content = fs.readFileSync(full, 'utf8');
+      let content = fs.readFileSync(entryPath, 'utf8');
       for (const [key, value] of Object.entries(map)) {
         content = content.replaceAll(key, value);
       }
-      fs.writeFileSync(full, content);
+      fs.writeFileSync(entryPath, content);
     }
   }
 }
